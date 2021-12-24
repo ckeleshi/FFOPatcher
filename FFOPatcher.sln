@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31019.35
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "d3d9", "d3d9\d3d9.vcxproj", "{E947B27C-07B2-4A30-87B1-C63400C5A6D2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "opengl32", "opengl32\opengl32.vcxproj", "{7D067935-99D0-44B0-BFC6-AB559C04F91F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{74F491D0-2BFD-43B4-B67B-1C0F0FA3B030}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		common\TODO.txt = common\TODO.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E947B27C-07B2-4A30-87B1-C63400C5A6D2}.Debug|x86.ActiveCfg = Debug|Win32
+		{E947B27C-07B2-4A30-87B1-C63400C5A6D2}.Debug|x86.Build.0 = Debug|Win32
+		{E947B27C-07B2-4A30-87B1-C63400C5A6D2}.Release|x86.ActiveCfg = Release|Win32
+		{E947B27C-07B2-4A30-87B1-C63400C5A6D2}.Release|x86.Build.0 = Release|Win32
+		{7D067935-99D0-44B0-BFC6-AB559C04F91F}.Debug|x86.ActiveCfg = Debug|Win32
+		{7D067935-99D0-44B0-BFC6-AB559C04F91F}.Debug|x86.Build.0 = Debug|Win32
+		{7D067935-99D0-44B0-BFC6-AB559C04F91F}.Release|x86.ActiveCfg = Release|Win32
+		{7D067935-99D0-44B0-BFC6-AB559C04F91F}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {364470C8-C371-4DE6-A6B4-B4846914DB16}
+	EndGlobalSection
+EndGlobal
