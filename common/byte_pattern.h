@@ -2,12 +2,7 @@
 //https://github.com/ThirteenAG/Hooking.Patterns
 
 #pragma once
-#include <Windows.h>
-#include <cstddef>
-#include <cstdint>
-#include <vector>
-#include <string_view>
-#include <stdexcept>
+#include "stdinc.h"
 
 class memory_pointer
 {

@@ -1141,7 +1141,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 
     case DLL_PROCESS_DETACH:
     {
-        //Clean();
+        Finalize(hModule);
         break;
     }
 

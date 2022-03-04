@@ -3,3 +3,4 @@
 
 UINT ReadInterval(HMODULE module);
 void Patch(HMODULE module);
+void Finalize(HMODULE module);

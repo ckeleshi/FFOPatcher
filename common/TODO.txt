@@ -1,1 +1,2 @@
 Todo:
+看看有没有执行timeBeginPeriod/我们自己的timeGetTime

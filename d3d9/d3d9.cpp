@@ -6,7 +6,7 @@ FARPROC fnDirect3DCreate9;
 
 __declspec(naked) IDirect3D9* WINAPI Direct3DCreate9_stub(UINT SDKVersion)
 {
-    __asm  { jmp fnDirect3DCreate9 }
+    __asm { jmp fnDirect3DCreate9 }
 }
 
 void LoadD3D9()
@@ -34,6 +34,12 @@ BOOL APIENTRY DllMain(HMODULE hModule,
     {
         LoadD3D9();
         Patch(hModule);
+        break;
+    }
+
+    case DLL_PROCESS_DETACH:
+    {
+        Finalize(hModule);
         break;
     }
 
