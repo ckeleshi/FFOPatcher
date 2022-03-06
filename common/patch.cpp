@@ -2,15 +2,28 @@
 #include "byte_pattern.h"
 #include "injector/hooking.hpp"
 
-std::uint64_t g_ran_count = 0;
+#pragma comment(lib, "winmm.lib")
+
+class time_period_guard
+{
+public:
+    time_period_guard()
+    {
+        timeGetDevCaps(&_caps, sizeof(_caps));
+        timeBeginPeriod(_caps.wPeriodMin);
+    }
+
+    ~time_period_guard()
+    {
+        timeEndPeriod(_caps.wPeriodMin);
+    }
+
+private:
+    TIMECAPS _caps;
+} g_period_guard;
 
 DWORD WINAPI accurate_timeGetTime()
 {
-    if (g_ran_count < std::numeric_limits<std::uint64_t>::max())
-    {
-        ++g_ran_count;
-    }
-
     return static_cast<DWORD>(std::chrono::duration_cast<std::chrono::milliseconds>(
         std::chrono::steady_clock::now() - std::chrono::steady_clock::time_point{}).count());
 }
@@ -53,25 +66,4 @@ void Patch(HMODULE module)
     {
         injector::WriteMemory(*patterner.get_first().p<std::uintptr_t>(2), &accurate_timeGetTime, true);
     }
-}
-
-void Finalize(HMODULE module)
-{
-    wchar_t cPath[MAX_PATH];
-    std::filesystem::path cppPath;
-
-    GetModuleFileNameW(module, cPath, MAX_PATH);
-    cppPath = cPath;
-    cppPath = cppPath.parent_path() / L"ffopatcher_log.txt";
-
-    auto out = std::fopen(cppPath.string().c_str(), "w");
-    if (!out)
-    {
-        return;
-    }
-
-    std::fprintf(out, "%llu", g_ran_count);
-
-    std::fflush(out);
-    std::fclose(out);
 }
