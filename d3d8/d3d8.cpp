@@ -1,15 +1,15 @@
 ﻿#include "../common/stdinc.h"
 #include "../common/patch.h"
 
-HMODULE D3D9Module;
-FARPROC fnDirect3DCreate9;
+HMODULE D3D8Module;
+FARPROC fnDirect3DCreate8;
 
-__declspec(naked) void* WINAPI Direct3DCreate9_stub(UINT SDKVersion)
+__declspec(naked) void* WINAPI Direct3DCreate8_stub(UINT SDKVersion)
 {
-    __asm { jmp fnDirect3DCreate9 }
+    __asm { jmp fnDirect3DCreate8 }
 }
 
-void LoadD3D9()
+void LoadD3D8()
 {
     WCHAR* szSystemPath = nullptr;
 
@@ -19,8 +19,8 @@ void LoadD3D9()
 
     CoTaskMemFree(szSystemPath);
 
-    D3D9Module = LoadLibraryW((wstr + L"\\d3d9.dll").c_str());
-    fnDirect3DCreate9 = GetProcAddress(D3D9Module, "Direct3DCreate9");
+    D3D8Module = LoadLibraryW((wstr + L"\\d3d8.dll").c_str());
+    fnDirect3DCreate8 = GetProcAddress(D3D8Module, "Direct3DCreate8");
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule,
@@ -32,7 +32,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
     {
     case DLL_PROCESS_ATTACH:
     {
-        LoadD3D9();
+        LoadD3D8();
         Patch(hModule);
         break;
     }

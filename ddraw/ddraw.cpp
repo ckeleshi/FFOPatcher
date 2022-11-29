@@ -1,15 +1,15 @@
-﻿#include "../common/stdinc.h"
+#include "../common/stdinc.h"
 #include "../common/patch.h"
 
-HMODULE D3D9Module;
-FARPROC fnDirect3DCreate9;
+HMODULE DDRAWModule;
+FARPROC fnDirectDrawCreate;
 
-__declspec(naked) void* WINAPI Direct3DCreate9_stub(UINT SDKVersion)
+__declspec(naked) void* WINAPI DirectDrawCreate_stub(UINT SDKVersion)
 {
-    __asm { jmp fnDirect3DCreate9 }
+    __asm { jmp fnDirectDrawCreate }
 }
 
-void LoadD3D9()
+void LoadDDRAW()
 {
     WCHAR* szSystemPath = nullptr;
 
@@ -19,8 +19,8 @@ void LoadD3D9()
 
     CoTaskMemFree(szSystemPath);
 
-    D3D9Module = LoadLibraryW((wstr + L"\\d3d9.dll").c_str());
-    fnDirect3DCreate9 = GetProcAddress(D3D9Module, "Direct3DCreate9");
+    DDRAWModule = LoadLibraryW((wstr + L"\\ddraw.dll").c_str());
+    fnDirectDrawCreate = GetProcAddress(DDRAWModule, "DirectDrawCreate");
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule,
@@ -32,7 +32,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,
     {
     case DLL_PROCESS_ATTACH:
     {
-        LoadD3D9();
+        LoadDDRAW();
         Patch(hModule);
         break;
     }

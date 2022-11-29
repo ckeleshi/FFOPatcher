@@ -1,0 +1,3 @@
+LIBRARY "d3d8"
+EXPORTS
+Direct3DCreate8 = Direct3DCreate8_stub

@@ -1,7 +1,6 @@
 ﻿#pragma once
 #define NOMINMAX
 #include <Windows.h>
-#include <d3d9.h>
 #include <ShlObj.h>
 #include <chrono>
 #include <string>

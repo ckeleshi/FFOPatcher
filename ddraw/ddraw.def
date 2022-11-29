@@ -1,0 +1,3 @@
+LIBRARY "ddraw"
+EXPORTS
+DirectDrawCreate = DirectDrawCreate_stub
