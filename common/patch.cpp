@@ -1,10 +1,10 @@
-#include "patch.h"
+ï»¿#include "patch.h"
 #include "byte_pattern.h"
 #include "injector/hooking.hpp"
 
 #pragma comment(lib, "winmm.lib")
 
-//Ìá¸ßSleepº¯ÊıµÄ¾«¶È
+//æé«˜Sleepå‡½æ•°çš„ç²¾åº¦
 class time_period_guard
 {
 public:
@@ -24,12 +24,13 @@ private:
     TIMECAPS _caps;
 } g_period_guard;
 
-//Ìá¸ßÊ±¼ä´ÁµÄ¾«¶È
+//æé«˜æ—¶é—´æˆ³çš„ç²¾åº¦
 DWORD WINAPI accurate_timeGetTime()
 {
     return static_cast<DWORD>(std::chrono::duration_cast<std::chrono::milliseconds>(
         std::chrono::steady_clock::now() - std::chrono::steady_clock::time_point{}).count());
 }
+
 
 UINT ReadInterval(HMODULE module)
 {
@@ -49,15 +50,27 @@ void Patch(HMODULE module)
 
     byte_pattern patterner;
 
-    //ĞŞ¸ÄÖ¡¼ä¸ô£¬0x1DÎªÓÎÏ·Ä¬ÈÏÖµ29
     patterner.find_pattern("83 F8 1D 73 0D 6A 1D");
     if (patterner.has_size(1))
     {
+        //ä¿®æ”¹å¸§é—´éš”ï¼Œ0x1Dä¸ºæ¸¸æˆé»˜è®¤å€¼29
         injector::WriteMemory<unsigned char>(patterner.get_first().i(2), frame_interval, true);
         injector::WriteMemory<unsigned char>(patterner.get_first().i(6), frame_interval, true);
+
+        //æ¸²æŸ“è€—æ—¶é«˜äºè®¾ç½®çš„å¸§é—´éš”æ—¶ï¼ŒåªSleep 0è€Œä¸æ˜¯Sleep 1
+        {
+            /*
+             add eax, 0xA; 83 C0 0A
+             æ”¹ä¸º
+             nop;          90
+             xor eax eax;  33 C0
+             */
+            unsigned char asm_bytes[] = { 0x90,0x33,0xC0 }; //nop; xor eax,eax;
+            injector::WriteMemoryRaw(patterner.get_first().i(xxx), asm_bytes, sizeof(asm_bytes), true);
+        }
     }
 
-    //ÍêÈ«Ìæ»»ÓÎÏ·Ê¹ÓÃµÄËùÓĞtimeGetTimeº¯ÊıÎª½Ï¸ß¾«¶È°æ±¾
+    //å®Œå…¨æ›¿æ¢æ¸¸æˆä½¿ç”¨çš„æ‰€æœ‰timeGetTimeå‡½æ•°ä¸ºè¾ƒé«˜ç²¾åº¦ç‰ˆæœ¬
     patterner.find_pattern("8B 35 ? ? ? ? 59 FF D6");
     if (patterner.has_size(1))
     {
