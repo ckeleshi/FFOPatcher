@@ -41,7 +41,7 @@ UINT ReadInterval(HMODULE module)
     cppPath = cPath;
     cppPath = cppPath.parent_path() / L"ffopatcher.ini";
 
-    return std::clamp(GetPrivateProfileIntW(L"FFOPatcher", L"FrameInterval", 15u, cppPath.wstring().c_str()), 1u, 29u);
+    return std::clamp(GetPrivateProfileIntW(L"FFOPatcher", L"FrameInterval", 15u, cppPath.wstring().c_str()), 0u, 29u);
 }
 
 void Patch(HMODULE module)
@@ -66,7 +66,7 @@ void Patch(HMODULE module)
              xor eax eax;  33 C0
              */
             unsigned char asm_bytes[] = { 0x90,0x33,0xC0 }; //nop; xor eax,eax;
-            injector::WriteMemoryRaw(patterner.get_first().i(xxx), asm_bytes, sizeof(asm_bytes), true);
+            injector::WriteMemoryRaw(patterner.get_first().i(0x20), asm_bytes, sizeof(asm_bytes), true);
         }
     }
 
