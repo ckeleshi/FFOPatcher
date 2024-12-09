@@ -57,8 +57,8 @@ void Patch(HMODULE module)
         injector::WriteMemory<unsigned char>(patterner.get_first().i(2), frame_interval, true);
         injector::WriteMemory<unsigned char>(patterner.get_first().i(6), frame_interval, true);
 
-        //渲染耗时高于设置的帧间隔时，只Sleep 0而不是Sleep 1
-        {
+        //想要极限帧数时，Sleep 0而不是Sleep 1
+        if (frame_interval == 0) {
             /*
              add eax, 0xA; 83 C0 0A
              改为
