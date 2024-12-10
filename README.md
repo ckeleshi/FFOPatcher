@@ -4,7 +4,9 @@
 **本人从未在中国国内任何公开平台发布此插件，请自行承担使用本插件的风险！**</br>
 
 # 安装方法
-使用方法:将附件解压到qqffo.exe同一目录下。通过修改ffopatcher.ini中FrameInterval数值。一般地，FrameInterval越小，游戏帧数越高。</br>
+使用方法:将附件解压到qqffo.exe同一目录下。</br>
+只需要根据所选图形模式选择一个dll即可。</br>
+通过修改ffopatcher.ini中FrameInterval数值。一般地，FrameInterval越小，游戏帧数越高。</br>
 由于官方集成了蓝地板解决方案，压缩包中仅保留了相关文件。
 
 # FrameInterval是什么？
