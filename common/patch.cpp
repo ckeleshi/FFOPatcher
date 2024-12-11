@@ -1,6 +1,7 @@
 ﻿#include "patch.h"
 #include "byte_pattern.h"
 #include "injector/hooking.hpp"
+#include <optional>
 
 #pragma comment(lib, "winmm.lib")
 
@@ -22,7 +23,43 @@ public:
 
 private:
     TIMECAPS _caps;
-} g_period_guard;
+};
+
+std::optional<time_period_guard> g_period_guard;
+
+//单个进程只进行一次patch
+class inprocess_singleton
+{
+public:
+    inprocess_singleton()
+    {
+        wchar_t mutex_name_buffer[MAX_PATH];
+
+        std::swprintf(mutex_name_buffer, L"FFOPATCHER_MUTEX_%u", GetCurrentProcessId());
+
+        auto mutex = CreateMutexW(nullptr, FALSE, mutex_name_buffer);
+
+        if (mutex != nullptr && GetLastError() != ERROR_ALREADY_EXISTS)
+        {
+            _mutex = mutex;
+        }
+    }
+
+    ~inprocess_singleton()
+    {
+        if (_mutex)
+        {
+            CloseHandle(_mutex);
+        }
+    }
+
+    bool is_first_load() const {
+        return _mutex != nullptr;
+    }
+
+private:
+    HANDLE _mutex;
+} g_singleton;
 
 //提高时间戳的精度
 DWORD WINAPI accurate_timeGetTime()
@@ -46,6 +83,13 @@ UINT ReadInterval(HMODULE module)
 
 void Patch(HMODULE module)
 {
+    if (!g_singleton.is_first_load())
+    {
+        return;
+    }
+
+    g_period_guard.emplace();
+
     auto frame_interval = static_cast<unsigned char>(ReadInterval(module));
 
     byte_pattern patterner;
