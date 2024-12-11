@@ -39,9 +39,16 @@ public:
 
         auto mutex = CreateMutexW(nullptr, FALSE, mutex_name_buffer);
 
-        if (mutex != nullptr && GetLastError() != ERROR_ALREADY_EXISTS)
+        if (mutex != nullptr)
         {
-            _mutex = mutex;
+            if (GetLastError() == ERROR_ALREADY_EXISTS)
+            {
+                CloseHandle(mutex);
+            }
+            else if (GetLastError() == ERROR_SUCCESS)
+            {
+                _mutex = mutex;
+            }
         }
     }
 
